@@ -4,13 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
-public class zoologicoUI extends JFrame {
+public class zoologico extends JFrame {
 
     private JDesktopPane desktopPane;
     private JTextArea mainOutputArea;
     private List<Jaula> jaulas;
 
-    public zoologicoUI() {
+    public zoologico() {
         setTitle("Zoológico - Interfaz de Documento Múltiple");
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,7 +47,6 @@ public class zoologicoUI extends JFrame {
         scrollPane.setBounds(20, 20, 760, 100);
         desktopPane.add(scrollPane);
 
-        // Inicializar lista de jaulas
         jaulas = List.of(new Jaula("1"), new Jaula("2"), new Jaula("3"), new Jaula("4"));
     }
 
@@ -59,31 +58,28 @@ public class zoologicoUI extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        List<Animales> listaAnimales = Animales.getListaAnimales();
-        JComboBox<Animales> animalesComboBox = new JComboBox<>(listaAnimales.toArray(new Animales[0]));
+        JComboBox<Animales> animalesComboBox = new JComboBox<>(Animales.getListaAnimales().toArray(new Animales[0]));
         panel.add(new JLabel("Seleccione Animal:"));
         panel.add(animalesComboBox);
 
-        List<Habitat> listaHabitats = Habitat.getListaHabitats();
-        JList<Habitat> habitatList = new JList<>(listaHabitats.toArray(new Habitat[0]));
+        JList<Habitat> habitatList = new JList<>(Habitat.getListaHabitats().toArray(new Habitat[0]));
         habitatList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         panel.add(new JLabel("Seleccione Hábitat:"));
         panel.add(new JScrollPane(habitatList));
 
         JButton asignarButton = new JButton("Asignar Hábitat");
-        asignarButton.addActionListener(e -> {
-            Animales animalSeleccionado = (Animales) animalesComboBox.getSelectedItem();
-            Habitat habitatSeleccionado = habitatList.getSelectedValue();
-            if (animalSeleccionado != null && habitatSeleccionado != null) {
-                animalSeleccionado.setHabitat(habitatSeleccionado);
-                mainOutputArea.append(animalSeleccionado + " ha sido ubicado en " + habitatSeleccionado + "\n");
-                internalFrame.dispose();
-            }
-        });
+        asignarButton.addActionListener(e -> asignarHabitat((Animales) animalesComboBox.getSelectedItem(), habitatList.getSelectedValue()));
 
         panel.add(asignarButton);
         internalFrame.add(panel);
         desktopPane.add(internalFrame);
+    }
+
+    private void asignarHabitat(Animales animal, Habitat habitat) {
+        if (animal != null && habitat != null) {
+            animal.setHabitat(habitat);
+            mainOutputArea.append(animal + " ha sido ubicado en " + habitat + "\n");
+        }
     }
 
     private void crearAsignacionAlimento() {
@@ -94,30 +90,27 @@ public class zoologicoUI extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        List<Animales> listaAnimales = Animales.getListaAnimales();
-        JComboBox<Animales> animalesComboBox = new JComboBox<>(listaAnimales.toArray(new Animales[0]));
+        JComboBox<Animales> animalesComboBox = new JComboBox<>(Animales.getListaAnimales().toArray(new Animales[0]));
         panel.add(new JLabel("Seleccione Animal:"));
         panel.add(animalesComboBox);
 
-        List<Alimento> listaAlimentos = Alimento.getListaAlimentos();
-        JComboBox<Alimento> alimentoComboBox = new JComboBox<>(listaAlimentos.toArray(new Alimento[0]));
+        JComboBox<Alimento> alimentoComboBox = new JComboBox<>(Alimento.getListaAlimentos().toArray(new Alimento[0]));
         panel.add(new JLabel("Seleccione Alimento:"));
         panel.add(alimentoComboBox);
 
         JButton asignarButton = new JButton("Asignar Alimento");
-        asignarButton.addActionListener(e -> {
-            Animales animalSeleccionado = (Animales) animalesComboBox.getSelectedItem();
-            Alimento alimentoSeleccionado = (Alimento) alimentoComboBox.getSelectedItem();
-            if (animalSeleccionado != null && alimentoSeleccionado != null) {
-                animalSeleccionado.setAlimento(alimentoSeleccionado);
-                mainOutputArea.append(animalSeleccionado + " ha sido alimentado con " + alimentoSeleccionado + "\n");
-                internalFrame.dispose();
-            }
-        });
+        asignarButton.addActionListener(e -> asignarAlimento((Animales) animalesComboBox.getSelectedItem(), (Alimento) alimentoComboBox.getSelectedItem()));
 
         panel.add(asignarButton);
         internalFrame.add(panel);
         desktopPane.add(internalFrame);
+    }
+
+    private void asignarAlimento(Animales animal, Alimento alimento) {
+        if (animal != null && alimento != null) {
+            animal.setAlimento(alimento);
+            mainOutputArea.append(animal + " ha sido alimentado con " + alimento + "\n");
+        }
     }
 
     private void crearAsignacionJaula() {
@@ -128,8 +121,7 @@ public class zoologicoUI extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        List<Animales> listaAnimales = Animales.getListaAnimales();
-        JComboBox<Animales> animalesComboBox = new JComboBox<>(listaAnimales.toArray(new Animales[0]));
+        JComboBox<Animales> animalesComboBox = new JComboBox<>(Animales.getListaAnimales().toArray(new Animales[0]));
         panel.add(new JLabel("Seleccione Animal:"));
         panel.add(animalesComboBox);
 
@@ -138,19 +130,18 @@ public class zoologicoUI extends JFrame {
         panel.add(jaulaComboBox);
 
         JButton asignarButton = new JButton("Asignar Jaula");
-        asignarButton.addActionListener(e -> {
-            Animales animalSeleccionado = (Animales) animalesComboBox.getSelectedItem();
-            Jaula jaulaSeleccionada = (Jaula) jaulaComboBox.getSelectedItem();
-            if (animalSeleccionado != null && jaulaSeleccionada != null) {
-                jaulaSeleccionada.setAnimal(animalSeleccionado);
-                mainOutputArea.append(animalSeleccionado + " ha sido asignado a " + jaulaSeleccionada + "\n");
-                internalFrame.dispose();
-            }
-        });
+        asignarButton.addActionListener(e -> asignarJaula((Animales) animalesComboBox.getSelectedItem(), (Jaula) jaulaComboBox.getSelectedItem()));
 
         panel.add(asignarButton);
         internalFrame.add(panel);
         desktopPane.add(internalFrame);
+    }
+
+    private void asignarJaula(Animales animal, Jaula jaula) {
+        if (animal != null && jaula != null) {
+            jaula.setAnimal(animal);
+            mainOutputArea.append(animal + " ha sido asignado a " + jaula + "\n");
+        }
     }
 
     private void crearCantar() {
@@ -161,27 +152,26 @@ public class zoologicoUI extends JFrame {
         JPanel panel = new JPanel();
         panel.setLayout(new FlowLayout());
 
-        List<Animales> listaAnimales = Animales.getListaAnimales();
-        JComboBox<Animales> animalesComboBox = new JComboBox<>(listaAnimales.toArray(new Animales[0]));
+        JComboBox<Animales> animalesComboBox = new JComboBox<>(Animales.getListaAnimales().toArray(new Animales[0]));
         panel.add(new JLabel("Seleccione Animal:"));
         panel.add(animalesComboBox);
 
         JButton cantarButton = new JButton("Cantar");
-        cantarButton.addActionListener(e -> {
-            Animales animalSeleccionado = (Animales) animalesComboBox.getSelectedItem();
-            if (animalSeleccionado != null) {
-                animalSeleccionado.cantar(100); // Número arbitrario para cantar
-                mainOutputArea.append(animalSeleccionado + " está cantando.\n");
-                internalFrame.dispose();
-            }
-        });
+        cantarButton.addActionListener(e -> cantar((Animales) animalesComboBox.getSelectedItem()));
 
         panel.add(cantarButton);
         internalFrame.add(panel);
         desktopPane.add(internalFrame);
     }
 
+    private void cantar(Animales animal) {
+        if (animal != null) {
+            animal.cantar(100); // Número arbitrario para cantar
+            mainOutputArea.append(animal + " está cantando.\n");
+        }
+    }
+
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new zoologicoUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> new zoologico().setVisible(true));
     }
 }
