@@ -1,7 +1,10 @@
 package zoologico;
 
-public class Animales extends Zoo {
-    
+import java.util.ArrayList;
+import java.util.List;
+
+public class Animales extends Zoo{
+
     String nombre;
     Alimento alimento;
     Habitat habitat;
@@ -36,5 +39,14 @@ public class Animales extends Zoo {
     @Override
     public String toString() {
         return nombre;
+    }
+
+    public static List<Animales> getListaAnimales() {
+        List<Animales> listaAnimales = new ArrayList<>();
+        listaAnimales.add(new Animales("León"));
+        listaAnimales.add(new Animales("Elefante"));
+        listaAnimales.add(new Animales("Mono"));
+        listaAnimales.add(new Animales("Pingüino"));
+        return listaAnimales;
     }
 }
