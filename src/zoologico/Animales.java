@@ -18,6 +18,14 @@ public class Animales extends Zoo {
         this.habitat = habitat;
     }
 
+    public Alimento getAlimento() {
+        return alimento;
+    }
+
+    public Habitat getHabitat() {
+        return habitat;
+    }
+
     @Override
     public double cantar(double num) {
         double canto = Math.sqrt(num);
